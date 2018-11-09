@@ -6,6 +6,7 @@ import android.util.Xml;
 import org.xmlpull.v1.XmlPullParser;
 
 import java.io.StringReader;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,7 +29,19 @@ public class ParseProductoXML {
         try {
             XmlPullParser xml = Xml.newPullParser();
             xml.setInput(new StringReader(stringXML));
-            SimpleDateFormat fechaParse = new SimpleDateFormat("dd MMM yyyy HH:mm:ss");
+            SimpleDateFormat fechaParse = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz");
+           // fechaParse.par
+           // DateFormat fechaParse = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+            //SimpleDateFormat fechaParse = new SimpleDateFormat("dd MM yyyy HH:mm:ss");
+            //SimpleDateFormat fechaParse = new SimpleDateFormat("dd MM yyyy HH:mm:ss");
+
+
+
+            /*
+             SimpleDateFormat sdf = new sdf("DD/MM/YYYY HH24:mm");
+             String fecha = sdf.format(noti.getFecha());
+            * */
+            //Thu, 08 Nov 2018 18:20:52 -0300
             int event = xml.getEventType();
             while( event!= XmlPullParser.END_DOCUMENT ) {
                 Log.d("Wile","while");
@@ -38,18 +51,20 @@ public class ParseProductoXML {
 
                     case XmlPullParser.START_TAG:
                         Log.d("StartTag","tag: "+xml.getName());
+                        //("title".equals(xmlPullParser.getName()) && n != null
                         if ("item".equals(xml.getName())){
                             noti = new Noticia();
-                        }else if ("title".equals(xml.getName())) {
+                        }else if ("title".equals(xml.getName())&& noti != null) {
                             noti.setTitulo(xml.nextText());
-                        }else if ("link".equals(xml.getName())) {
+                        }else if ("link".equals(xml.getName())&& noti != null) {
                             noti.setUrl(xml.nextText());
-                        }else if ("description".equals(xml.getName())) {
+                        }else if ("description".equals(xml.getName())&& noti != null) {
                             noti.setDescripcion(xml.nextText());
-                        }else if ("pubDate".equals(xml.getName())) {
+                        }else if ("pubDate".equals(xml.getName())&& noti != null) {
                             try {
-                                Log.d("TEST", ""+fechaParse.parse(xml.nextText()));
+                               // Log.d("TEST", ""+fechaParse.parse(xml.nextText()));
                                 Date date = fechaParse.parse(xml.nextText());
+                                Log.d("TEST", ""+date);
                                 noti.setFecha(date);
                             } catch (ParseException e) {
                                 e.printStackTrace();

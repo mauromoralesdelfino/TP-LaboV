@@ -36,7 +36,7 @@ public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClic
         this.titulo=(TextView) itemView.findViewById(R.id.txtTitle);
         this.link=(TextView) itemView.findViewById(R.id.txtLink);
         this.descripcion=(TextView) itemView.findViewById(R.id.txtDescription);
-        //this.fecha=(TextView) itemView.findViewById(R.id.txtPubDate);
+        this.fecha=(TextView) itemView.findViewById(R.id.txtPubDate);
         this.creador=(TextView) itemView.findViewById(R.id.txtCreador);
         this.foto=(ImageView) itemView.findViewById(R.id.Imagen);
     }

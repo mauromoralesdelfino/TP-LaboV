@@ -11,6 +11,24 @@ public class Noticia {
     private String descripcion;
     private Date fecha;
     private String creador;
+    boolean buscoImagen;
+    byte[] img;
+
+    public boolean isBuscoImagen() {
+        return buscoImagen;
+    }
+
+    public void setBuscoImagen(boolean buscoImagen) {
+        this.buscoImagen = buscoImagen;
+    }
+
+    public byte[] getImg() {
+        return img;
+    }
+
+    public void setImg(byte[] img) {
+        this.img = img;
+    }
 
     public Noticia() {}
 

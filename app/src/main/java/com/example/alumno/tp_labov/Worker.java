@@ -13,8 +13,10 @@ public class Worker extends Thread {
 
     Handler h;
     URL url;
-    Boolean bool;
+    boolean img;
     String conex;
+    String urlImg;
+    int pos;
 
     public Worker(Handler h, String url)
     {
@@ -23,22 +25,36 @@ public class Worker extends Thread {
 
     }
 
+    public Worker(Handler h, String url, boolean img,int pos)
+
+    {
+        this.h =h;
+        this.urlImg = url;
+        this.img = img;
+        this.pos=pos;
+    }
     @Override
     public void run() {
 
-
         try {
 
-            HttpConection z = new HttpConection("GET");
+            if (this.img==true)
+            {
+                HttpConection foto = new HttpConection("GET");
+                Message m = new Message();
+                m.arg1 = 2;
+                m.arg2=this.pos;
+                m.obj= foto.getBytesData(urlImg);
+                h.sendMessage(m);
 
 
-            Thread.sleep(4000);
-            Message m = new Message();
-            m.arg1=1;
-            //new String(this.httpConnection.getBytesData(this.url))
-           m.obj = ParseProductoXML.Listar(new String(z.getBytesData(conex)));
-
-            h.sendMessage(m);
+            }else {
+                HttpConection z = new HttpConection("GET");
+                Message m = new Message();
+                m.arg1 = 1;
+                m.obj = ParseProductoXML.Listar(new String(z.getBytesData(conex)));
+                h.sendMessage(m);
+            }
 
         } catch (Exception e) {
             e.printStackTrace();

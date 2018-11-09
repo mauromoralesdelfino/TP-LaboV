@@ -1,9 +1,11 @@
 package com.example.alumno.tp_labov;
 
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import java.util.List;
 
@@ -24,17 +26,33 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
         Noticia p = this.lista.get(position);
-        /*String s = p.getCantidad().toString();
-        holder.nombre.setText(p.getNombre());
-        holder.precio.setText(p.getPrecio().toString());
-        holder.cantidad.setText(p.getCantidad().toString());*/
+
         holder.setPos(position);
         holder.titulo.setText(p.getTitulo());
         holder.descripcion.setText(p.getDescripcion());
-       // holder.fecha.setText(p.getFecha().toString());
+        holder.fecha.setText(p.getFecha().toString());
         holder.creador.setText(p.getCreador());
         holder.link.setText(p.getUrl());
 
+       if (p.getImg() == null && p.isBuscoImagen() == false )
+       {
+           //busco la imagen
+           p.setBuscoImagen(true);
+           Worker g = new Worker(this.activity.h,p.getImagen(),p.buscoImagen,position);
+           Thread hilo = new Thread(g);
+           hilo.start();
+       }else if(p.getImg()!=null && p.isBuscoImagen() ==true){
+
+           holder.foto.setImageBitmap(BitmapFactory.decodeByteArray(p.getImg(),0,p.getImg().length));//bytes,0,bytes.length
+       }
+
+
+
+
+    }
+
+    public void SettearLista(int posicion,byte[] foto)
+    {
 
     }
 

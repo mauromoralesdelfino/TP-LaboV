@@ -14,13 +14,13 @@
         android:layout_margin="8dp"
         android:orientation="horizontal">
 
-        <android.support.v7.widget.AppCompatImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/Imagen"/>
+        <ImageView
+            android:layout_width="70dp"
+            android:layout_height="100dp"
+            android:id="@+id/Imagen"
+            android:src="@mipmap/ic_launcher"
 
-
-
+            />
 
     <LinearLayout
         android:layout_width="348dp"
