@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback,
 
         rvProductos = (RecyclerView) findViewById(R.id.listaRV);
         h=new Handler(this);
-        w = new Worker(h,"https://www.clarin.com/rss/lo-ultimo/");
+        w = new Worker(h,"https://www.clarin.com/rss/rural/");
         hilo = new Thread(w);
         hilo.start();
 
@@ -107,12 +107,33 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback,
     @Override
     public boolean onQueryTextSubmit(String query) {
         Log.d("search","enter");
+        adapter.notifyDataSetChanged();
         return false;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
         Log.d("search","text change");
+        List<Noticia> aux = new ArrayList<Noticia>();
+        if (newText!=null && !newText.isEmpty()) {
+            for (Noticia item : adapter.lista)
+            {
+                if (item.getTitulo().equalsIgnoreCase(newText) || item.getDescripcion().equalsIgnoreCase(newText))
+                {
+                    aux.add(item);
+                }
+            }
+            adapter = new MyAdapter(aux, this);
+            rvProductos.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+        }
+        else
+            {
+                adapter = new MyAdapter(listaN, this);
+                rvProductos.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+            }
+
         return false;
     }
 

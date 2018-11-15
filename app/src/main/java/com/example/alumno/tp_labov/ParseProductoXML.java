@@ -42,9 +42,11 @@ public class ParseProductoXML {
              String fecha = sdf.format(noti.getFecha());
             * */
             //Thu, 08 Nov 2018 18:20:52 -0300
-            int event = xml.getEventType();
-            while( event!= XmlPullParser.END_DOCUMENT ) {
+            int event = 0;
+            event = xml.getEventType();
+            while( event != XmlPullParser.END_DOCUMENT ) {
                 Log.d("Wile","while");
+
                 switch (event) {
                     case XmlPullParser.START_DOCUMENT:
                         break;
