@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.menu.ShowableListMenu;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback,
 
         rvProductos = (RecyclerView) findViewById(R.id.listaRV);
         h=new Handler(this);
-        w = new Worker(h,"https://www.clarin.com/rss/rural/");
+        w = new Worker(h,"https://www.clarin.com/rss/lo-ultimo/");
         hilo = new Thread(w);
         hilo.start();
 
@@ -76,7 +77,23 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback,
         if (id == R.id.campo_buscar) {
             Log.d("menu","Click en settings");
             return true;
+        }if (id == R.id.action_rssMenu) {
+            Log.d("menu","Click en settings");
+            /*w = new Worker(h,"https://www.clarin.com/rss/politica/");
+            hilo = new Thread(w);
+            hilo.start();*/
+
+            MyDialog md= new MyDialog();
+            md.show(getSupportFragmentManager()," ");
+            return true;
         }
+       /* if (id == R.id.action_rural) {
+            Log.d("menu","Click en opcion 1");
+            w = new Worker(h,"https://www.clarin.com/rss/rural/");
+            hilo = new Thread(w);
+            hilo.start();
+            return true;
+        }*/
 
         return super.onOptionsItemSelected(item);
     }
@@ -107,7 +124,23 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback,
     @Override
     public boolean onQueryTextSubmit(String query) {
         Log.d("search","enter");
-        adapter.notifyDataSetChanged();
+        List<Noticia> aux = new ArrayList<Noticia>();
+        if (query!=null && !query.isEmpty()) {
+                for (Noticia item : adapter.lista) {
+                    if (item.getTitulo().toLowerCase().contains(query.toLowerCase()) || item.getDescripcion().toLowerCase().contains(query.toLowerCase())) {
+                        aux.add(item);
+                    }
+                }
+                adapter = new MyAdapter(aux, this);
+                rvProductos.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+            }
+        else
+        {
+            adapter = new MyAdapter(listaN, this);
+            rvProductos.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+        }
         return false;
     }
 
@@ -116,17 +149,16 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback,
         Log.d("search","text change");
         List<Noticia> aux = new ArrayList<Noticia>();
         if (newText!=null && !newText.isEmpty()) {
-            for (Noticia item : adapter.lista)
-            {
-                if (item.getTitulo().equalsIgnoreCase(newText) || item.getDescripcion().equalsIgnoreCase(newText))
-                {
-                    aux.add(item);
+            if ( newText.length()>=4   ) {
+                for (Noticia item : adapter.lista) {
+                    if (item.getTitulo().toLowerCase().contains(newText.toLowerCase()) || item.getDescripcion().toLowerCase().contains(newText.toLowerCase())) {
+                        aux.add(item);
+                    }
                 }
-            }
-            adapter = new MyAdapter(aux, this);
-            rvProductos.setAdapter(adapter);
-            adapter.notifyDataSetChanged();
-        }
+                adapter = new MyAdapter(aux, this);
+                rvProductos.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+            }}
         else
             {
                 adapter = new MyAdapter(listaN, this);
@@ -139,3 +171,20 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback,
 
 
 }
+
+/*onCreate recuperar el string de url(ruta) de la noticia putextra y getextra
+String s = (ruta)
+webView wv = wv findviewById
+(habilitar javascript en webview)
+WebSettings ws = wv.getSettings
+ws.setJAvaScripEnable(true)
+wv.loadURl(s);
+loadData(html);
+
+esto dentro del segundo activity
+
+
+floating action button, abajo a la derecha con el compartir, back arriba a la izquierda
+*
+*
+* */
