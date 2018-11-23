@@ -34,18 +34,23 @@ public class Listener implements DialogInterface.OnClickListener {
         {
             Log.d("menu","Click en settings");
             //this.titulo=(TextView) itemView.findViewById(R.id.txtTitle);
+            prefs = v.getContext().getSharedPreferences("miConfig", Context.MODE_PRIVATE);
+            Editor editor = prefs.edit();
            for(View item:v.getTouchables())
             {
                 Log.d("item",""+((CheckBox)item).getText());
-                prefs = v.getContext().getSharedPreferences("miConfig", Context.MODE_PRIVATE);
-                Editor editor = prefs.edit();
+
               //  editor.putString("key_1", "Hola mundo");
                 //editor.putInt("key_2", 5);
               String nombreCheck = String.valueOf(((CheckBox) item).getText());
                 editor.putBoolean(nombreCheck,((CheckBox) item).isChecked());
-                editor.commit();
+
+                Log.d("item",""+nombreCheck);
+
             }
+            editor.commit();
         }
+
     }
 }
 /*fun onCheckboxClicked(view: View) {

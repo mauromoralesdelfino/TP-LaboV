@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">TP-LaboV</string>
+    <string name="title_activity_web__view_button">Web_ViewButton</string>
 </resources>

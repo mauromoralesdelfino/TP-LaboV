@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 
 
+import android.content.Context;
 import android.content.DialogInterface;
 
 
@@ -32,27 +33,38 @@ public class MyDialog extends DialogFragment {
         builder.setTitle("Choice Rss");
         //builder.setMessage("Hola mundo");
         builder.setView(v);
+
         Listener l = new Listener(v);
         builder.setNegativeButton("Canelar",l);
         builder.setPositiveButton("Aceptar",l);
 
 
         AlertDialog ad = builder.create();
+        mostrar();
         return ad;
     }
 
 
-    public void mostrar()
+    public  void mostrar()
     {
-       /* Boolean a = prefs.getBoolean("Lo Ultimo",false);
-        Boolean b = prefs.getBoolean("Mundo",false);
-        Boolean c = prefs.getBoolean("Tecnologia",false);
+
+        prefs = getContext().getSharedPreferences("miConfig", Context.MODE_PRIVATE);
+        Boolean a = prefs.getBoolean("Lo Ultimo",false);
+        Boolean b = prefs.getBoolean("Politica",false);
+        Boolean c = prefs.getBoolean("Economia",false);
         Boolean d = prefs.getBoolean("Sociedad",false);
         Boolean e = prefs.getBoolean("Mundo",false);
-        Boolean f = prefs.getBoolean("Politica",false);*/
+        Boolean f = prefs.getBoolean("Tecnologia",false);
 
 
-        //Log.d("menu","" + a.toString());
+
+        Log.d("ABC","u " + a );
+        Log.d("ABC","p " + b );
+        Log.d("ABC","e " + c );
+        Log.d("ABC","s " + d );
+        Log.d("ABC","m " + e );
+        Log.d("ABC","p " + f );
+
          }
 
 

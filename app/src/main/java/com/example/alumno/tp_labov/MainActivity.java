@@ -1,12 +1,15 @@
 package com.example.alumno.tp_labov;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.ListViewAutoScrollHelper;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.menu.ShowableListMenu;
 import android.support.v7.widget.LinearLayoutManager;
@@ -30,7 +33,9 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback,
     MyAdapter adapter;
     Thread hilo;
     Worker w;
+    Worker wg;
     List<Noticia> listaN;
+    List<Noticia> listaAUX;
     ImageView iv;
 
     @Override
@@ -39,11 +44,24 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        SharedPreferences prefs = getSharedPreferences("miConfig", Context.MODE_PRIVATE);
+        Boolean a = prefs.getBoolean("Lo Ultimo",false);
+        Boolean b = prefs.getBoolean("Mundo",false);
+        Boolean c = prefs.getBoolean("Tecnologia",false);
+        Boolean d = prefs.getBoolean("Sociedad",false);
+        Boolean e = prefs.getBoolean("Mundo",false);
+        Boolean f = prefs.getBoolean("Politica",false);
+
+        Log.d("lo ulitmo",""+a);
+
         rvProductos = (RecyclerView) findViewById(R.id.listaRV);
         h=new Handler(this);
         w = new Worker(h,"https://www.clarin.com/rss/lo-ultimo/");
         hilo = new Thread(w);
         hilo.start();
+
+
+
 
         p = new ArrayList<>();
 
@@ -53,6 +71,9 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback,
         adapter = new MyAdapter(p,this);
         rvProductos.setAdapter(adapter);
 
+        wg = new Worker(h,"https://www.clarin.com/rss/rural/");
+        hilo = new Thread(wg);
+        hilo.start();
 
 
     }
@@ -75,16 +96,17 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback,
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.campo_buscar) {
-            Log.d("menu","Click en settings");
+            Log.d("menu","Click en buscar");
             return true;
         }if (id == R.id.action_rssMenu) {
-            Log.d("menu","Click en settings");
+            Log.d("menu","Click en rss");
             /*w = new Worker(h,"https://www.clarin.com/rss/politica/");
             hilo = new Thread(w);
             hilo.start();*/
 
             MyDialog md= new MyDialog();
             md.show(getSupportFragmentManager()," ");
+            //md.mostrar();
             return true;
         }
        /* if (id == R.id.action_rural) {
@@ -101,11 +123,15 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback,
     @Override
     public boolean handleMessage(Message msg) {
         if (msg.arg1==1) {
+
+            //Log.d("masojb","MSG_OBJ"+msg.obj.getClass());
             listaN = (List<Noticia>) msg.obj;
-            adapter = new MyAdapter(listaN, this);
+
+           /* adapter = new MyAdapter(listaN, this);
             rvProductos.setAdapter(adapter);
             adapter.notifyDataSetChanged();
-            rvProductos.setLayoutManager(new LinearLayoutManager(this));
+            rvProductos.setLayoutManager(new LinearLayoutManager(this));*/;
+            adapter.AddToList(listaN);
             adapter.notifyDataSetChanged();
 
         }else if(msg.arg1==2){
@@ -123,22 +149,28 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback,
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        Log.d("search","enter");
+      //  Log.d("search","enter");
         List<Noticia> aux = new ArrayList<Noticia>();
+        List<Noticia> entera = adapter.lista;
+
         if (query!=null && !query.isEmpty()) {
                 for (Noticia item : adapter.lista) {
                     if (item.getTitulo().toLowerCase().contains(query.toLowerCase()) || item.getDescripcion().toLowerCase().contains(query.toLowerCase())) {
                         aux.add(item);
                     }
                 }
-                adapter = new MyAdapter(aux, this);
+              /*  adapter = new MyAdapter(aux, this);
                 rvProductos.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
+                adapter.notifyDataSetChanged();*/
+            adapter.setLista(aux);
+            adapter.notifyDataSetChanged();
             }
         else
         {
-            adapter = new MyAdapter(listaN, this);
+            /*adapter = new MyAdapter(listaN, this);
             rvProductos.setAdapter(adapter);
+            adapter.notifyDataSetChanged();*/
+            adapter.setLista(entera);
             adapter.notifyDataSetChanged();
         }
         return false;
@@ -146,8 +178,9 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback,
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        Log.d("search","text change");
+        //Log.d("search","text change");
         List<Noticia> aux = new ArrayList<Noticia>();
+        List<Noticia> entera = adapter.lista;
         if (newText!=null && !newText.isEmpty()) {
             if ( newText.length()>=4   ) {
                 for (Noticia item : adapter.lista) {
@@ -155,14 +188,18 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback,
                         aux.add(item);
                     }
                 }
-                adapter = new MyAdapter(aux, this);
+                /*adapter = new MyAdapter(aux, this);
                 rvProductos.setAdapter(adapter);
+                adapter.notifyDataSetChanged();*/
+                adapter.setLista(aux);
                 adapter.notifyDataSetChanged();
             }}
         else
             {
-                adapter = new MyAdapter(listaN, this);
+              /*  adapter = new MyAdapter(listaN, this);
                 rvProductos.setAdapter(adapter);
+                adapter.notifyDataSetChanged();*/
+                adapter.setLista(entera);
                 adapter.notifyDataSetChanged();
             }
 
@@ -170,6 +207,12 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback,
     }
 
 
+    public void VistaWeb(String direccion)
+    {
+        Intent i = new Intent(this,Web_ViewButton.class);// me permite intentar hacer algo, quie lo lanza y que lanzo parametros
+        i.putExtra("sitio",direccion);
+        super.startActivity(i);
+    }
 }
 
 /*onCreate recuperar el string de url(ruta) de la noticia putextra y getextra

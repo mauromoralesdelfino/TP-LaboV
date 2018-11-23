@@ -45,14 +45,14 @@ public class ParseProductoXML {
             int event = 0;
             event = xml.getEventType();
             while( event != XmlPullParser.END_DOCUMENT ) {
-                Log.d("Wile","while");
+              //  Log.d("Wile","while");
 
                 switch (event) {
                     case XmlPullParser.START_DOCUMENT:
                         break;
 
                     case XmlPullParser.START_TAG:
-                        Log.d("StartTag","tag: "+xml.getName());
+                     //   Log.d("StartTag","tag: "+xml.getName());
                         //("title".equals(xmlPullParser.getName()) && n != null
                         if ("item".equals(xml.getName())){
                             noti = new Noticia();
@@ -66,7 +66,7 @@ public class ParseProductoXML {
                             try {
                                // Log.d("TEST", ""+fechaParse.parse(xml.nextText()));
                                 Date date = fechaParse.parse(xml.nextText());
-                                Log.d("TEST", ""+date);
+                             //   Log.d("TEST", ""+date);
                                 noti.setFecha(date);
                             } catch (ParseException e) {
                                 e.printStackTrace();

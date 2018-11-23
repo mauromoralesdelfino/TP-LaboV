@@ -39,17 +39,14 @@ public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClic
         this.fecha=(TextView) itemView.findViewById(R.id.txtPubDate);
         this.creador=(TextView) itemView.findViewById(R.id.txtCreador);
         this.foto=(ImageView) itemView.findViewById(R.id.Imagen);
+        this.activity=activity;
+        this.itemView.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
 
-        int x =0;
-        if (v.getId() == this.rvNoticias.getId())
-        {
-            x=1;
-        }
-
+    this.activity.VistaWeb(this.link.getText().toString());
 
 
     }

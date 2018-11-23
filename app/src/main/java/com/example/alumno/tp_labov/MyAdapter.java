@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -69,7 +70,15 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
         this.activity=activity;
     }*/
     public MyAdapter(List<Noticia> lista, MainActivity activity) {
-        this.lista = lista;
+        this.lista = new ArrayList<>();
         this.activity=activity;
+    }
+
+    public void setLista(List<Noticia> lista) {
+        this.lista = lista;
+    }
+
+    public void AddToList(List<Noticia> lista) {
+        this.lista.addAll(lista);
     }
 }
