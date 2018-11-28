@@ -31,7 +31,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
         holder.setPos(position);
         holder.titulo.setText(p.getTitulo());
         holder.descripcion.setText(p.getDescripcion());
-        holder.fecha.setText(p.getFecha().toString());
+//        holder.fecha.setText(p.getFecha().toString());
         holder.creador.setText(p.getCreador());
         holder.link.setText(p.getUrl());
 
@@ -80,5 +80,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
     public void AddToList(List<Noticia> lista) {
         this.lista.addAll(lista);
+    }
+
+    public List<Noticia> getLista() {
+        return lista;
     }
 }

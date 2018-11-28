@@ -40,7 +40,7 @@ public class MyDialog extends DialogFragment {
 
 
         AlertDialog ad = builder.create();
-        mostrar();
+        //mostrar();
         return ad;
     }
 

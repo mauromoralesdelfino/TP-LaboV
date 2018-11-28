@@ -3,6 +3,7 @@
     package="com.example.alumno.tp_labov">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -20,7 +21,7 @@
         <activity
             android:name=".Web_ViewButton"
             android:label="@string/title_activity_web__view_button"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            ></activity>
     </application>
 
 </manifest>

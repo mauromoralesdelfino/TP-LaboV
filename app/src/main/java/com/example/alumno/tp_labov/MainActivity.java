@@ -29,14 +29,13 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback,
    public Handler h;
     URL url;
     RecyclerView rvProductos;
-    List<Noticia> p;
     MyAdapter adapter;
-    Thread hilo;
-    Worker w;
-    Worker wg;
+    Thread h1,h2,h3,h4,h5,h6,h7;
+    Worker w1,w2,w3,w4,w5,w6;
     List<Noticia> listaN;
     List<Noticia> listaAUX;
     ImageView iv;
+    SharedPreferences preferencias;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,43 +43,39 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        SharedPreferences prefs = getSharedPreferences("miConfig", Context.MODE_PRIVATE);
-        Boolean a = prefs.getBoolean("Lo Ultimo",false);
-        Boolean b = prefs.getBoolean("Mundo",false);
-        Boolean c = prefs.getBoolean("Tecnologia",false);
-        Boolean d = prefs.getBoolean("Sociedad",false);
-        Boolean e = prefs.getBoolean("Mundo",false);
-        Boolean f = prefs.getBoolean("Politica",false);
-
-        Log.d("lo ulitmo",""+a);
-
         rvProductos = (RecyclerView) findViewById(R.id.listaRV);
+
+
+        listaN = new ArrayList<>();
         h=new Handler(this);
-        w = new Worker(h,"https://www.clarin.com/rss/lo-ultimo/");
-        hilo = new Thread(w);
-        hilo.start();
-
-
-
-
-        p = new ArrayList<>();
 
         rvProductos = (RecyclerView) findViewById(R.id.listaRV);
-
         rvProductos.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new MyAdapter(p,this);
+        adapter = new MyAdapter(listaN,this);
         rvProductos.setAdapter(adapter);
 
-        wg = new Worker(h,"https://www.clarin.com/rss/rural/");
-        hilo = new Thread(wg);
-        hilo.start();
+        TemasElegidos();
+
 
 
     }
     @Override
     protected void onStop() {
         super.onStop();
-        hilo.interrupt();
+
+        if ( h1!=null)
+        {h1.interrupt();}
+        if ( h2!=null)
+        {h1.interrupt();}
+        if ( h3!=null)
+        {h1.interrupt();}
+        if ( h4!=null)
+        {h1.interrupt();}
+        if ( h5!=null)
+        {h1.interrupt();}
+        if ( h6!=null)
+        {h1.interrupt();}
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -100,22 +95,14 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback,
             return true;
         }if (id == R.id.action_rssMenu) {
             Log.d("menu","Click en rss");
-            /*w = new Worker(h,"https://www.clarin.com/rss/politica/");
-            hilo = new Thread(w);
-            hilo.start();*/
+
 
             MyDialog md= new MyDialog();
             md.show(getSupportFragmentManager()," ");
-            //md.mostrar();
+            TemasElegidos();
             return true;
         }
-       /* if (id == R.id.action_rural) {
-            Log.d("menu","Click en opcion 1");
-            w = new Worker(h,"https://www.clarin.com/rss/rural/");
-            hilo = new Thread(w);
-            hilo.start();
-            return true;
-        }*/
+
 
         return super.onOptionsItemSelected(item);
     }
@@ -123,16 +110,15 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback,
     @Override
     public boolean handleMessage(Message msg) {
         if (msg.arg1==1) {
-
-            //Log.d("masojb","MSG_OBJ"+msg.obj.getClass());
-            listaN = (List<Noticia>) msg.obj;
-
+            Log.d("handle","message");
            /* adapter = new MyAdapter(listaN, this);
             rvProductos.setAdapter(adapter);
             adapter.notifyDataSetChanged();
             rvProductos.setLayoutManager(new LinearLayoutManager(this));*/;
-            adapter.AddToList(listaN);
+            adapter.AddToList((List<Noticia>) msg.obj);
             adapter.notifyDataSetChanged();
+            listaN = adapter.getLista();
+
 
         }else if(msg.arg1==2){
 
@@ -149,38 +135,29 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback,
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-      //  Log.d("search","enter");
         List<Noticia> aux = new ArrayList<Noticia>();
-        List<Noticia> entera = adapter.lista;
-
         if (query!=null && !query.isEmpty()) {
                 for (Noticia item : adapter.lista) {
                     if (item.getTitulo().toLowerCase().contains(query.toLowerCase()) || item.getDescripcion().toLowerCase().contains(query.toLowerCase())) {
                         aux.add(item);
                     }
                 }
-              /*  adapter = new MyAdapter(aux, this);
-                rvProductos.setAdapter(adapter);
-                adapter.notifyDataSetChanged();*/
+
             adapter.setLista(aux);
             adapter.notifyDataSetChanged();
             }
         else
         {
-            /*adapter = new MyAdapter(listaN, this);
-            rvProductos.setAdapter(adapter);
-            adapter.notifyDataSetChanged();*/
-            adapter.setLista(entera);
-            adapter.notifyDataSetChanged();
+
+          adapter.setLista(listaN);
+           adapter.notifyDataSetChanged();
         }
         return false;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        //Log.d("search","text change");
         List<Noticia> aux = new ArrayList<Noticia>();
-        List<Noticia> entera = adapter.lista;
         if (newText!=null && !newText.isEmpty()) {
             if ( newText.length()>=4   ) {
                 for (Noticia item : adapter.lista) {
@@ -188,18 +165,14 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback,
                         aux.add(item);
                     }
                 }
-                /*adapter = new MyAdapter(aux, this);
-                rvProductos.setAdapter(adapter);
-                adapter.notifyDataSetChanged();*/
+
                 adapter.setLista(aux);
                 adapter.notifyDataSetChanged();
             }}
         else
             {
-              /*  adapter = new MyAdapter(listaN, this);
-                rvProductos.setAdapter(adapter);
-                adapter.notifyDataSetChanged();*/
-                adapter.setLista(entera);
+
+                adapter.setLista(listaN);
                 adapter.notifyDataSetChanged();
             }
 
@@ -212,6 +185,60 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback,
         Intent i = new Intent(this,Web_ViewButton.class);// me permite intentar hacer algo, quie lo lanza y que lanzo parametros
         i.putExtra("sitio",direccion);
         super.startActivity(i);
+    }
+
+    public void TemasElegidos()
+    {
+        Log.d("temas","elegidos");
+        preferencias = getSharedPreferences("miConfig", Context.MODE_PRIVATE);
+        Boolean ultimo = preferencias.getBoolean("Lo Ultimo",false);
+        Boolean pol = preferencias.getBoolean("Politica",false);
+        Boolean eco = preferencias.getBoolean("Economia",false);
+        Boolean soc = preferencias.getBoolean("Sociedad",false);
+        Boolean mundo = preferencias.getBoolean("Mundo",false);
+        Boolean tecno = preferencias.getBoolean("Tecnologia",false);
+
+
+        if (ultimo.booleanValue())
+        {
+            Log.d("blablabla","blablabla1");
+            w1 = new Worker(h,"https://www.clarin.com/rss/lo-ultimo/");
+            h1 = new Thread(w1);
+            h1.start();
+
+        }
+        else if(eco)
+        {   w2 = new Worker(h,"https://www.clarin.com/rss/economia/");
+            h2 = new Thread(w2);
+            h2.start();
+        }
+        else if(pol)
+        {
+            w3 = new Worker(h,"https://www.clarin.com/rss/politica/");
+            h3 = new Thread(w3);
+            h3.start();
+        }
+        else if(soc)
+        {
+            w4 = new Worker(h,"https://www.clarin.com/rss/sociedad/");
+            h4 = new Thread(w4);
+            h4.start();
+        }
+        else if(mundo)
+        {
+            w5 = new Worker(h,"https://www.clarin.com/rss/mundo/");
+            h5 = new Thread(w5);
+            h5.start();
+        }
+        else if(tecno)
+        {
+            w6 = new Worker(h,"https://www.clarin.com/rss/tecnologia/");
+            h6 = new Thread(w6);
+            h6.start();
+        }
+
+
+        adapter.notifyDataSetChanged();
     }
 }
 
