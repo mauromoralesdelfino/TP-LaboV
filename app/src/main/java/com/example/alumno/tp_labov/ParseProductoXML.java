@@ -63,14 +63,14 @@ public class ParseProductoXML {
                         }else if ("description".equals(xml.getName())&& noti != null) {
                             noti.setDescripcion(xml.nextText());
                         }else if ("pubDate".equals(xml.getName())&& noti != null) {
-                            try {
+                           // try {
                                // Log.d("TEST", ""+fechaParse.parse(xml.nextText()));
-                                Date date = fechaParse.parse(xml.nextText());
+                              //  Date date = fechaParse.parse(xml.nextText());
                              //   Log.d("TEST", ""+date);
-                                noti.setFecha(date);
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
+                               // noti.setFecha(date);
+                           // } catch (ParseException e) {
+                             //   e.printStackTrace();
+                            //}
                         }else if("dc:creator".equals(xml.getName()) && noti != null)
                             noti.setCreador(xml.nextText());
                         else if("enclosure".equals(xml.getName()) && noti != null){

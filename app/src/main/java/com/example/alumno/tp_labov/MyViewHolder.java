@@ -24,15 +24,6 @@ public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClic
 
     public MyViewHolder(@NonNull View itemView,MainActivity activity) {
         super(itemView);
-        /*this.nombre=(TextView) itemView.findViewById(R.id.txtNombre);
-        this.cantidad=(TextView) itemView.findViewById(R.id.txtCantidad);
-        this.precio =(TextView) itemView.findViewById(R.id.txtPrecio);
-        this.mas = (ImageButton) itemView.findViewById(R.id.btnMas);
-        this.menos = (ImageButton) itemView.findViewById(R.id.btnMenos);
-        this.activity=activity;
-        this.mas.setOnClickListener(this);
-        this.menos.setOnClickListener(this);*/
-      //  Log.d("Hola","holder");
         this.titulo=(TextView) itemView.findViewById(R.id.txtTitle);
         this.link=(TextView) itemView.findViewById(R.id.txtLink);
         this.descripcion=(TextView) itemView.findViewById(R.id.txtDescription);

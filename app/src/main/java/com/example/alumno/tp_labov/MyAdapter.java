@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -31,7 +32,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
         holder.setPos(position);
         holder.titulo.setText(p.getTitulo());
         holder.descripcion.setText(p.getDescripcion());
-//        holder.fecha.setText(p.getFecha().toString());
+//       holder.fecha.setText(p.getFecha().toString());
         holder.creador.setText(p.getCreador());
         holder.link.setText(p.getUrl());
 
@@ -72,17 +73,27 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
     public MyAdapter(List<Noticia> lista, MainActivity activity) {
         this.lista = new ArrayList<>();
         this.activity=activity;
+        ordenarNoticias();
     }
 
-    public void setLista(List<Noticia> lista) {
+    public void setLista(List<Noticia> lista)
+    {
         this.lista = lista;
+        ordenarNoticias();
     }
 
-    public void AddToList(List<Noticia> lista) {
+    public void AddToList(List<Noticia> lista)
+    {
         this.lista.addAll(lista);
+        ordenarNoticias();
     }
 
     public List<Noticia> getLista() {
         return lista;
+    }
+
+    public void ordenarNoticias(){
+        Collections.sort(this.lista);
+
     }
 }

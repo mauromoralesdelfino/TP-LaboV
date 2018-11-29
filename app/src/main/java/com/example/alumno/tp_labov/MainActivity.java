@@ -90,16 +90,16 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback,
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.campo_buscar) {
+      /*  if (id == R.id.campo_buscar) {
             Log.d("menu","Click en buscar");
             return true;
-        }if (id == R.id.action_rssMenu) {
+        }*/if (id == R.id.action_rssMenu) {
             Log.d("menu","Click en rss");
 
 
-            MyDialog md= new MyDialog();
+            MyDialog md= new MyDialog(this);
             md.show(getSupportFragmentManager()," ");
-            TemasElegidos();
+
             return true;
         }
 
@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback,
     @Override
     public boolean handleMessage(Message msg) {
         if (msg.arg1==1) {
-            Log.d("handle","message");
+            Log.d("handle","mensaje sagrado");
            /* adapter = new MyAdapter(listaN, this);
             rvProductos.setAdapter(adapter);
             adapter.notifyDataSetChanged();
@@ -118,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback,
             adapter.AddToList((List<Noticia>) msg.obj);
             adapter.notifyDataSetChanged();
             listaN = adapter.getLista();
+
 
 
         }else if(msg.arg1==2){
@@ -189,6 +190,12 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback,
 
     public void TemasElegidos()
     {
+
+        Log.d("primera linea"," a ver cuantas veces entra");
+        listaN = new ArrayList<>();
+        adapter.setLista(listaN);
+        adapter.notifyDataSetChanged();
+
         Log.d("temas","elegidos");
         preferencias = getSharedPreferences("miConfig", Context.MODE_PRIVATE);
         Boolean ultimo = preferencias.getBoolean("Lo Ultimo",false);
@@ -201,44 +208,54 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback,
 
         if (ultimo.booleanValue())
         {
-            Log.d("blablabla","blablabla1");
+
             w1 = new Worker(h,"https://www.clarin.com/rss/lo-ultimo/");
             h1 = new Thread(w1);
             h1.start();
+            Log.d("ultimo","ultimo");
 
         }
         else if(eco)
         {   w2 = new Worker(h,"https://www.clarin.com/rss/economia/");
             h2 = new Thread(w2);
             h2.start();
+            Log.d("eco","eco");
         }
         else if(pol)
         {
+
             w3 = new Worker(h,"https://www.clarin.com/rss/politica/");
             h3 = new Thread(w3);
             h3.start();
+            Log.d("eco","eco");
         }
         else if(soc)
         {
             w4 = new Worker(h,"https://www.clarin.com/rss/sociedad/");
             h4 = new Thread(w4);
             h4.start();
+            Log.d("soc","soc");
         }
         else if(mundo)
         {
             w5 = new Worker(h,"https://www.clarin.com/rss/mundo/");
             h5 = new Thread(w5);
             h5.start();
+            Log.d("mundo","mundo");
         }
         else if(tecno)
         {
             w6 = new Worker(h,"https://www.clarin.com/rss/tecnologia/");
             h6 = new Thread(w6);
-            h6.start();
+
+            Log.d("tecno","tecno");
+
         }
 
 
-        adapter.notifyDataSetChanged();
+
+
+
     }
 }
 

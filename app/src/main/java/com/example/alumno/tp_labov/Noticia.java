@@ -1,8 +1,10 @@
 package com.example.alumno.tp_labov;
 
+import android.support.annotation.NonNull;
+
 import java.util.Date;
 
-public class Noticia {
+public class Noticia implements Comparable<Noticia>{
 
     private Integer id;
     private String titulo;
@@ -30,7 +32,7 @@ public class Noticia {
         this.img = img;
     }
 
-    public Noticia() {}
+    public Noticia()  {}
 
     public Noticia(Integer id, String titulo, String url, String imagen, String descripcion, Date fecha, String creador) {
         this.id = id;
@@ -96,5 +98,10 @@ public class Noticia {
 
     public void setCreador(String creador) {
         this.creador = creador;
+    }
+
+    @Override
+    public int compareTo(@NonNull Noticia o) {
+        return getTitulo().compareTo(o.getTitulo());
     }
 }

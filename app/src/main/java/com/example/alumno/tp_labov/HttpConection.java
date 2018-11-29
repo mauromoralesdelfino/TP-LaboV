@@ -43,7 +43,7 @@ public class HttpConection {
         urlConnection.setRequestMethod(this.metodo);
         urlConnection.connect();
         int response = urlConnection.getResponseCode();
-        Log.d("http", "Response code:" + response);
+        //Log.d("http", "Response code:" + response);
         if(response==200) {
             InputStream is = urlConnection.getInputStream();
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -60,7 +60,7 @@ public class HttpConection {
     }
 
     public String getStringData(String strUrl) throws IOException {
-        Log.d("Hola","Worker");
+       // Log.d("Hola","Worker");
         URL url = new URL(strUrl);
         //URL url = new URL("http://192.168.2.231:8080/Productos.xml");
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -80,7 +80,7 @@ public class HttpConection {
             urlConnection.connect();
         }
         int response = urlConnection.getResponseCode();
-        Log.d("http", "Response code:" + response);
+      //  Log.d("http", "Response code:" + response);
         if(response==200) {
             InputStream is = urlConnection.getInputStream();
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
